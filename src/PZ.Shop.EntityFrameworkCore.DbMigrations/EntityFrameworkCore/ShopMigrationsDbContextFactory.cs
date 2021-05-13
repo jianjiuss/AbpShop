@@ -11,8 +11,6 @@ namespace PZ.Shop.EntityFrameworkCore
     {
         public ShopMigrationsDbContext CreateDbContext(string[] args)
         {
-            ShopEfCoreEntityExtensionMappings.Configure();
-
             var configuration = BuildConfiguration();
 
             var builder = new DbContextOptionsBuilder<ShopMigrationsDbContext>()

@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using PZ.Shop.Todos;
 using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
 
@@ -16,6 +17,8 @@ namespace PZ.Shop.EntityFrameworkCore
     [ConnectionStringName("Default")]
     public class ShopDbContext : AbpDbContext<ShopDbContext>
     {
+        public DbSet<Todo> Todos { get; set; }
+
         public ShopDbContext(DbContextOptions<ShopDbContext> options)
             : base(options)
         {

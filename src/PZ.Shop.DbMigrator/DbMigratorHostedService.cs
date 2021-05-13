@@ -1,9 +1,9 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using PZ.Shop.Data;
-using Serilog;
+using PZ.Shop.EntityFrameworkCore;
 using Volo.Abp;
 
 namespace PZ.Shop.DbMigrator
@@ -22,14 +22,14 @@ namespace PZ.Shop.DbMigrator
             using (var application = AbpApplicationFactory.Create<ShopDbMigratorModule>(options =>
             {
                 options.UseAutofac();
-                options.Services.AddLogging(c => c.AddSerilog());
             }))
             {
                 application.Initialize();
 
                 await application
                     .ServiceProvider
-                    .GetRequiredService<ShopDbMigrationService>()
+                    .GetRequiredService<ShopMigrationsDbContext>()
+                    .Database
                     .MigrateAsync();
 
                 application.Shutdown();
