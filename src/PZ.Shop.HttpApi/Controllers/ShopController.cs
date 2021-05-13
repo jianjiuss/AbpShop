@@ -1,4 +1,4 @@
-﻿using PZ.Shop.Localization;
+﻿
 using Volo.Abp.AspNetCore.Mvc;
 
 namespace PZ.Shop.Controllers
@@ -9,7 +9,6 @@ namespace PZ.Shop.Controllers
     {
         protected ShopController()
         {
-            LocalizationResource = typeof(ShopResource);
         }
     }
 }

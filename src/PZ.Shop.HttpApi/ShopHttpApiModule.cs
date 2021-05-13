@@ -1,5 +1,4 @@
 ﻿using Localization.Resources.AbpUi;
-using PZ.Shop.Localization;
 using Volo.Abp.Account;
 using Volo.Abp.FeatureManagement;
 using Volo.Abp.Identity;
@@ -24,19 +23,6 @@ namespace PZ.Shop
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            ConfigureLocalization();
-        }
-
-        private void ConfigureLocalization()
-        {
-            Configure<AbpLocalizationOptions>(options =>
-            {
-                options.Resources
-                    .Get<ShopResource>()
-                    .AddBaseTypes(
-                        typeof(AbpUiResource)
-                    );
-            });
         }
     }
 }

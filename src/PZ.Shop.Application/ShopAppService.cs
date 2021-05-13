@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using PZ.Shop.Localization;
 using Volo.Abp.Application.Services;
 
 namespace PZ.Shop
@@ -12,7 +11,6 @@ namespace PZ.Shop
     {
         protected ShopAppService()
         {
-            LocalizationResource = typeof(ShopResource);
         }
     }
 }

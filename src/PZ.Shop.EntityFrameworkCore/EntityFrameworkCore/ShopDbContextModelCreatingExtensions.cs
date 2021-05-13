@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using PZ.Shop.Todos;
 using Volo.Abp;
+using Volo.Abp.EntityFrameworkCore.Modeling;
 
 namespace PZ.Shop.EntityFrameworkCore
 {
@@ -17,6 +19,13 @@ namespace PZ.Shop.EntityFrameworkCore
             //    b.ConfigureByConvention(); //auto configure for the base class props
             //    //...
             //});
+
+            builder.Entity<Todo>(b => 
+            {
+                b.ToTable("Todos");
+                b.ConfigureByConvention();
+                b.Property(t => t.Name);
+            });
         }
     }
 }
