@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <Import Project="..\..\common.props" />
 
@@ -10,14 +10,6 @@
   <ItemGroup>
     <ProjectReference Include="..\PZ.Shop.Domain\PZ.Shop.Domain.csproj" />
     <PackageReference Include="Volo.Abp.EntityFrameworkCore.SqlServer" Version="4.3.0" />
-    <PackageReference Include="Volo.Abp.PermissionManagement.EntityFrameworkCore" Version="4.3.0" />
-    <PackageReference Include="Volo.Abp.SettingManagement.EntityFrameworkCore" Version="4.3.0" />
-    <PackageReference Include="Volo.Abp.Identity.EntityFrameworkCore" Version="4.3.0" />
-    <PackageReference Include="Volo.Abp.IdentityServer.EntityFrameworkCore" Version="4.3.0" />
-    <PackageReference Include="Volo.Abp.BackgroundJobs.EntityFrameworkCore" Version="4.3.0" />
-    <PackageReference Include="Volo.Abp.AuditLogging.EntityFrameworkCore" Version="4.3.0" />
-    <PackageReference Include="Volo.Abp.TenantManagement.EntityFrameworkCore" Version="4.3.0" />
-    <PackageReference Include="Volo.Abp.FeatureManagement.EntityFrameworkCore" Version="4.3.0" />
   </ItemGroup>
 
 </Project>

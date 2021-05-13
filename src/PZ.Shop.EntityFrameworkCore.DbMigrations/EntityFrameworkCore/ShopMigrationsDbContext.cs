@@ -29,19 +29,6 @@ namespace PZ.Shop.EntityFrameworkCore
         {
             base.OnModelCreating(builder);
 
-            /* Include modules to your migration db context */
-
-            builder.ConfigurePermissionManagement();
-            builder.ConfigureSettingManagement();
-            builder.ConfigureBackgroundJobs();
-            builder.ConfigureAuditLogging();
-            builder.ConfigureIdentity();
-            builder.ConfigureIdentityServer();
-            builder.ConfigureFeatureManagement();
-            builder.ConfigureTenantManagement();
-
-            /* Configure your own tables/entities inside the ConfigureShop method */
-
             builder.ConfigureShop();
         }
     }
