@@ -8,17 +8,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\PZ.Shop.Domain\PZ.Shop.Domain.csproj" />
-    <ProjectReference Include="..\PZ.Shop.Application.Contracts\PZ.Shop.Application.Contracts.csproj" />
+    <PackageReference Include="Volo.Abp.AutoMapper" Version="4.3.0" />
+    <PackageReference Include="Volo.Abp.Ddd.Application" Version="4.3.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Volo.Abp.Account.Application" Version="4.3.0" />
-    <PackageReference Include="Volo.Abp.Identity.Application" Version="4.3.0" />
-    <PackageReference Include="Volo.Abp.PermissionManagement.Application" Version="4.3.0" />
-    <PackageReference Include="Volo.Abp.TenantManagement.Application" Version="4.3.0" />
-    <PackageReference Include="Volo.Abp.FeatureManagement.Application" Version="4.3.0" />
-    <PackageReference Include="Volo.Abp.SettingManagement.Application" Version="4.3.0" />
+    <ProjectReference Include="..\PZ.Shop.Domain\PZ.Shop.Domain.csproj" />
+    <ProjectReference Include="..\PZ.Shop.Application.Contracts\PZ.Shop.Application.Contracts.csproj" />
   </ItemGroup>
 
 </Project>

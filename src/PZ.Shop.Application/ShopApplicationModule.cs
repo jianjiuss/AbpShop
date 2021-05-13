@@ -1,23 +1,14 @@
-﻿using Volo.Abp.Account;
+﻿using Volo.Abp.Application;
 using Volo.Abp.AutoMapper;
-using Volo.Abp.FeatureManagement;
-using Volo.Abp.Identity;
 using Volo.Abp.Modularity;
-using Volo.Abp.PermissionManagement;
-using Volo.Abp.SettingManagement;
-using Volo.Abp.TenantManagement;
 
 namespace PZ.Shop
 {
     [DependsOn(
         typeof(ShopDomainModule),
-        typeof(AbpAccountApplicationModule),
         typeof(ShopApplicationContractsModule),
-        typeof(AbpIdentityApplicationModule),
-        typeof(AbpPermissionManagementApplicationModule),
-        typeof(AbpTenantManagementApplicationModule),
-        typeof(AbpFeatureManagementApplicationModule),
-        typeof(AbpSettingManagementApplicationModule)
+        typeof(AbpAutoMapperModule),
+        typeof(AbpDddApplicationModule)
         )]
     public class ShopApplicationModule : AbpModule
     {
@@ -25,7 +16,7 @@ namespace PZ.Shop
         {
             Configure<AbpAutoMapperOptions>(options =>
             {
-                options.AddMaps<ShopApplicationModule>();
+                options.AddMaps<ShopApplicationAutoMapperProfile>();
             });
         }
     }
