@@ -1,22 +1,10 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Volo.Abp.Account;
-using Volo.Abp.FeatureManagement;
-using Volo.Abp.Identity;
 using Volo.Abp.Modularity;
-using Volo.Abp.PermissionManagement;
-using Volo.Abp.TenantManagement;
-using Volo.Abp.SettingManagement;
 
 namespace PZ.Shop
 {
     [DependsOn(
-        typeof(ShopApplicationContractsModule),
-        typeof(AbpAccountHttpApiClientModule),
-        typeof(AbpIdentityHttpApiClientModule),
-        typeof(AbpPermissionManagementHttpApiClientModule),
-        typeof(AbpTenantManagementHttpApiClientModule),
-        typeof(AbpFeatureManagementHttpApiClientModule),
-        typeof(AbpSettingManagementHttpApiClientModule)
+        typeof(ShopApplicationContractsModule)
     )]
     public class ShopHttpApiClientModule : AbpModule
     {

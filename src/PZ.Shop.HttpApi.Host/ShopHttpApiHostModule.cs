@@ -10,33 +10,29 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using PZ.Shop.EntityFrameworkCore;
 using StackExchange.Redis;
 using Microsoft.OpenApi.Models;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Mvc;
-using Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy;
-using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.Autofac;
 using Volo.Abp.Caching;
 using Volo.Abp.Caching.StackExchangeRedis;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
-using Volo.Abp.Swashbuckle;
 using Volo.Abp.VirtualFileSystem;
+using PZ.Shop.Filters;
+using Swashbuckle.AspNetCore.SwaggerUI;
 
 namespace PZ.Shop
 {
     [DependsOn(
         typeof(ShopHttpApiModule),
+        typeof(ShopApplicationModule),
         typeof(AbpAutofacModule),
         typeof(AbpCachingStackExchangeRedisModule),
-        typeof(AbpAspNetCoreMvcUiMultiTenancyModule),
-        typeof(ShopApplicationModule),
-        typeof(ShopEntityFrameworkCoreDbMigrationsModule),
         typeof(AbpAspNetCoreSerilogModule),
-        typeof(AbpSwashbuckleModule)
+        typeof(AbpAspNetCoreMvcModule)
     )]
     public class ShopHttpApiHostModule : AbpModule
     {
@@ -49,9 +45,7 @@ namespace PZ.Shop
 
             ConfigureConventionalControllers();
             ConfigureAuthentication(context, configuration);
-            ConfigureLocalization();
             ConfigureCache(configuration);
-            ConfigureVirtualFileSystem(context);
             ConfigureRedis(context, configuration, hostingEnvironment);
             ConfigureCors(context, configuration);
             ConfigureSwaggerServices(context, configuration);
@@ -60,30 +54,6 @@ namespace PZ.Shop
         private void ConfigureCache(IConfiguration configuration)
         {
             Configure<AbpDistributedCacheOptions>(options => { options.KeyPrefix = "Shop:"; });
-        }
-
-        private void ConfigureVirtualFileSystem(ServiceConfigurationContext context)
-        {
-            var hostingEnvironment = context.Services.GetHostingEnvironment();
-
-            if (hostingEnvironment.IsDevelopment())
-            {
-                Configure<AbpVirtualFileSystemOptions>(options =>
-                {
-                    options.FileSets.ReplaceEmbeddedByPhysical<ShopDomainSharedModule>(
-                        Path.Combine(hostingEnvironment.ContentRootPath,
-                            $"..{Path.DirectorySeparatorChar}PZ.Shop.Domain.Shared"));
-                    options.FileSets.ReplaceEmbeddedByPhysical<ShopDomainModule>(
-                        Path.Combine(hostingEnvironment.ContentRootPath,
-                            $"..{Path.DirectorySeparatorChar}PZ.Shop.Domain"));
-                    options.FileSets.ReplaceEmbeddedByPhysical<ShopApplicationContractsModule>(
-                        Path.Combine(hostingEnvironment.ContentRootPath,
-                            $"..{Path.DirectorySeparatorChar}PZ.Shop.Application.Contracts"));
-                    options.FileSets.ReplaceEmbeddedByPhysical<ShopApplicationModule>(
-                        Path.Combine(hostingEnvironment.ContentRootPath,
-                            $"..{Path.DirectorySeparatorChar}PZ.Shop.Application"));
-                });
-            }
         }
 
         private void ConfigureConventionalControllers()
@@ -103,42 +73,20 @@ namespace PZ.Shop
                     options.RequireHttpsMetadata = Convert.ToBoolean(configuration["AuthServer:RequireHttpsMetadata"]);
                     options.Audience = "Shop";
                 });
+            context.Services.AddAuthorization();
         }
 
         private static void ConfigureSwaggerServices(ServiceConfigurationContext context, IConfiguration configuration)
         {
-            context.Services.AddAbpSwaggerGenWithOAuth(
-                configuration["AuthServer:Authority"],
-                new Dictionary<string, string>
-                {
-                    {"Shop", "Shop API"}
-                },
-                options =>
-                {
-                    options.SwaggerDoc("v1", new OpenApiInfo {Title = "Shop API", Version = "v1"});
+            context.Services.AddSwaggerGen(
+                options => {
+                    options.SwaggerDoc("v1", new OpenApiInfo { Title = "Shop API", Version = "v1" });
                     options.DocInclusionPredicate((docName, description) => true);
+                    options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, "PZ.Shop.Domain.xml"));
+                    options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, "PZ.Shop.Application.Contracts.xml"));
                     options.CustomSchemaIds(type => type.FullName);
+                    options.DocumentFilter<SwaggerDocumentFilter>();
                 });
-        }
-
-        private void ConfigureLocalization()
-        {
-            Configure<AbpLocalizationOptions>(options =>
-            {
-                options.Languages.Add(new LanguageInfo("ar", "ar", "العربية"));
-                options.Languages.Add(new LanguageInfo("cs", "cs", "Čeština"));
-                options.Languages.Add(new LanguageInfo("en", "en", "English"));
-                options.Languages.Add(new LanguageInfo("en-GB", "en-GB", "English (UK)"));
-                options.Languages.Add(new LanguageInfo("fr", "fr", "Français"));
-                options.Languages.Add(new LanguageInfo("hu", "hu", "Magyar"));
-                options.Languages.Add(new LanguageInfo("pt-BR", "pt-BR", "Português"));
-                options.Languages.Add(new LanguageInfo("ru", "ru", "Русский"));
-                options.Languages.Add(new LanguageInfo("tr", "tr", "Türkçe"));
-                options.Languages.Add(new LanguageInfo("zh-Hans", "zh-Hans", "简体中文"));
-                options.Languages.Add(new LanguageInfo("zh-Hant", "zh-Hant", "繁體中文"));
-                options.Languages.Add(new LanguageInfo("de-DE", "de-DE", "Deutsch", "de"));
-                options.Languages.Add(new LanguageInfo("es", "es", "Español", "es"));
-            });
         }
 
         private void ConfigureRedis(
@@ -189,31 +137,21 @@ namespace PZ.Shop
 
             app.UseAbpRequestLocalization();
 
-            if (!env.IsDevelopment())
-            {
-                app.UseErrorPage();
-            }
-
             app.UseCorrelationId();
             app.UseStaticFiles();
             app.UseRouting();
             app.UseCors(DefaultCorsPolicyName);
             app.UseAuthentication();
-
             app.UseAuthorization();
 
             app.UseSwagger();
-            app.UseAbpSwaggerUI(options =>
+            app.UseSwaggerUI(options =>
             {
                 options.SwaggerEndpoint("/swagger/v1/swagger.json", "Shop API");
-
-                var configuration = context.GetConfiguration();
-                options.OAuthClientId(configuration["AuthServer:SwaggerClientId"]);
-                options.OAuthClientSecret(configuration["AuthServer:SwaggerClientSecret"]);
-                options.OAuthScopes("Shop");
+                options.DefaultModelsExpandDepth(-1);
+                options.DocExpansion(DocExpansion.None);
             });
 
-            app.UseAuditing();
             app.UseAbpSerilogEnrichers();
             app.UseUnitOfWork();
             app.UseConfiguredEndpoints();

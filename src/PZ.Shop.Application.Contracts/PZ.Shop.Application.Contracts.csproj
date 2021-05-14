@@ -7,6 +7,10 @@
     <RootNamespace>PZ.Shop</RootNamespace>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>..\PZ.Shop.HttpApi.Host\PZ.Shop.Application.Contracts.xml</DocumentationFile>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="Volo.Abp.Ddd.Application.Contracts" Version="4.3.0" />
   </ItemGroup>
