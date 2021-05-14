@@ -23,12 +23,14 @@ using Volo.Abp.Modularity;
 using Volo.Abp.VirtualFileSystem;
 using PZ.Shop.Filters;
 using Swashbuckle.AspNetCore.SwaggerUI;
+using PZ.Shop.EntityFrameworkCore;
 
 namespace PZ.Shop
 {
     [DependsOn(
         typeof(ShopHttpApiModule),
         typeof(ShopApplicationModule),
+        typeof(ShopEntityFrameworkCoreModule),
         typeof(AbpAutofacModule),
         typeof(AbpCachingStackExchangeRedisModule),
         typeof(AbpAspNetCoreSerilogModule),
@@ -135,9 +137,6 @@ namespace PZ.Shop
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseAbpRequestLocalization();
-
-            app.UseCorrelationId();
             app.UseStaticFiles();
             app.UseRouting();
             app.UseCors(DefaultCorsPolicyName);

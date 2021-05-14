@@ -23,6 +23,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\PZ.Shop.Application\PZ.Shop.Application.csproj" />
+    <ProjectReference Include="..\PZ.Shop.EntityFrameworkCore\PZ.Shop.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\PZ.Shop.HttpApi\PZ.Shop.HttpApi.csproj" />
   </ItemGroup>
 
