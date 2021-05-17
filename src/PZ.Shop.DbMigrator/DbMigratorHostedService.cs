@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using PZ.Shop.Data;
 using PZ.Shop.EntityFrameworkCore;
 using Volo.Abp;
 
@@ -28,8 +29,7 @@ namespace PZ.Shop.DbMigrator
 
                 await application
                     .ServiceProvider
-                    .GetRequiredService<ShopMigrationsDbContext>()
-                    .Database
+                    .GetRequiredService<ShopDbMigrationService>()
                     .MigrateAsync();
 
                 application.Shutdown();
